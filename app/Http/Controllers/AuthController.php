@@ -37,24 +37,24 @@ class AuthController extends Controller
 
             $data = [];
             //return successful response
-            return $this->asJson([
-                'success' => true,
-                'message' => 'CREATED',
-            ], $data);
+            return $this->setData($data)
+                ->setMeta([
+                    'success'=>true,
+                    'message'=>'CREATED'
+                ])
+                ->json();
 
         } catch (Exception $e) {
-            return $this->asJson([
-                'success' => false,
-                'message' => 'Failed create user'
-            ], $e->getMessage(), 400);
+            return $this->setData($e->getMessage())
+                ->setMeta([
+                    'success'=>false,
+                    'message'=>'Fail'
+                ])
+                ->json();
         }
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     * @throws ValidationException
-     */
+
     public function login(Request $request)
     {
         $this->validate($request, [
@@ -65,10 +65,22 @@ class AuthController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (!$token = Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            $data = [
+                'dataaaa'
+            ];
+            $meta = [
+                'success' => true
+            ];
+
+            return $this
+                ->setData($data)
+                ->setMeta($meta)
+                ->setStatus(200)
+                ->json();
         }
 
         return $this->respondWithToken($token, Auth::user());
+//        return
     }
 
 

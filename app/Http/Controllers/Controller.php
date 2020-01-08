@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 
 class Controller extends BaseController
 {
+     protected static $functions = null;
+
     /**
      * @param $token
      * @param array $data
@@ -29,15 +31,23 @@ class Controller extends BaseController
     }
 
     /**
-     * @param $meta
      * @param $data
      * @param int $status
-     * @return \Illuminate\Http\JsonResponse
+     * @return MetaHelper|\Illuminate\Http\JsonResponse
      */
-    protected function asJson($meta, $data, $status = 200) {
-        return response()->json([
-            "meta" => $meta,
-            "data" => $data
-        ], $status);
+    protected function setData($data) {
+
+        $responseData = [
+            'data' => $data
+        ];
+
+        return self::setMeta($responseData);
+    }
+
+    protected static function setMeta($responseData) {
+        if(self::$functions == null)
+            self::$functions = new MetaHelper($responseData);
+
+        return self::$functions;
     }
 }

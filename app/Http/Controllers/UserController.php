@@ -24,11 +24,11 @@ class UserController extends Controller
      */
     public function profile()
     {
-        return $this->asJson([
-            'success' => true,
-            'message' => 'Data ditemukan',
-            'data' => Auth::user()
-        ]);
+        return $this->setData(Auth::user())
+            ->setMeta([
+                'success' => true,
+                'message' => 'Data ditemukan'
+            ])->json();
     }
 
     /**
@@ -36,11 +36,11 @@ class UserController extends Controller
      */
     public function allUsers()
     {
-        return $this->asJson([
-            'success' => true,
-            'message' => 'Data ditemukan',
-            'data' => User::all()
-        ]);
+        return $this->setData(User::all())
+            ->setMeta([
+                'success' => true,
+                'message' => 'Data ditemukan'
+            ])->json();
     }
 
     /**
@@ -52,19 +52,20 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
 
-            return $this->asJson([
-                'success' => true,
-                'message' => 'Data ditemukan',
-                'data' => $user
-            ]);
+            return $this->setData($user)
+                ->setMeta([
+                    'success' => true,
+                    'message' => 'Data ditemukan'
+                ])->json();
 
         } catch (Exception $e) {
 
-            return $this->asJson([
-                'success' => false,
-                'message' => 'Data tidak ditemukan',
-                'data' => []
-            ], 404);
+            return $this->setData([])
+                ->setMeta([
+                    'success' => false,
+                    'message' => 'Data tidak ditemukan'
+                ])
+                ->json();
 
         }
 
