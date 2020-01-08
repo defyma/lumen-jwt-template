@@ -36,6 +36,7 @@ class Authenticate
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        \App\Helpers\Helpers::dump($request->route());
         if ($this->auth->guard($guard)->guest()) {
             return response()->json([
                 'success' => false,

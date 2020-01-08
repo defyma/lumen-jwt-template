@@ -15,19 +15,29 @@ class Controller extends BaseController
     protected function respondWithToken($token, $data = [])
     {
         return response()->json([
-            'token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() * 60,
-            'user' => $data
+            "meta" => [
+                'success' => true,
+                'message' => 'Berhasil Login'
+            ],
+            "data" => [
+                'token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => Auth::factory()->getTTL() * 60,
+                'user' => $data
+            ]
         ], 200);
     }
 
     /**
+     * @param $meta
      * @param $data
      * @param int $status
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function asJson($data, $status = 200) {
-        return response()->json($data, $status);
+    protected function asJson($meta, $data, $status = 200) {
+        return response()->json([
+            "meta" => $meta,
+            "data" => $data
+        ], $status);
     }
 }

@@ -35,19 +35,18 @@ class AuthController extends Controller
             $user->password = app('hash')->make($plainPassword);
             $user->save();
 
+            $data = [];
             //return successful response
             return $this->asJson([
                 'success' => true,
                 'message' => 'CREATED',
-                'data' => $user,
-            ]);
+            ], $data);
 
         } catch (Exception $e) {
             return $this->asJson([
                 'success' => false,
-                'message' => 'Failed create user',
-                'data' => $e->getMessage(),
-            ], 400);
+                'message' => 'Failed create user'
+            ], $e->getMessage(), 400);
         }
     }
 
